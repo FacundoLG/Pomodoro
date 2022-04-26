@@ -2,16 +2,16 @@
   box-sizing: border-box;
 }
 :root{
-  --primary-color-1: #023047;
-  --primary-color-2:  #02273a;
-  --secondary-color-1: #ef476f;
-  --secondary-color-2: #c5f0ff;
+  --primary-color-1: #191D32;
+  --secondary-color-1: #1d3557;
+  --secondary-color-2: #F77F00;
+  --font-color-1: #ffffff;
   --space-1: 1rem;
   --space-2: 1.2rem;
 }
 body{
   margin: 0;
   padding: 0;
-  background-color: var(--primary-color-1);
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  background: var(--primary-color-1);
+  font-family: Arial, Helvetica, sans-serif
 }

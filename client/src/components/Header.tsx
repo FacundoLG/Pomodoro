@@ -1,20 +1,11 @@
-import React from 'react'
+import React, { FC, useState } from 'react'
 import styles from "./header.module.css"
-const Header = () => {
+const Header:FC = () => {
+    const [selectedTab,setSelectedTab] = useState<string>("Pomodoro")
   return (
     <div className={styles.header}>
-        <div>
-            <div className={styles.tab_pointer}> 
-            </div>
-            <ul className={styles.tabs}>
-                <li>
-                    Pomodoro
-                </li>
-                <li>
-                    Presets
-                </li>
-            </ul>
-        </div>
+        <button>Pomodoro</button>
+        <button>Presets</button>
     </div>
   )
 }
