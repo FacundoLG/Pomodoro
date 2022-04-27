@@ -2,16 +2,18 @@
   box-sizing: border-box;
 }
 :root{
-  --primary-color-1: #191D32;
-  --secondary-color-1: #1d3557;
-  --secondary-color-2: #F77F00;
+  --primary-color-1: #7678ED;
+  --secondary-color-1: #3D348B;
+  --secondary-color-2: #F7B801;
   --font-color-1: #ffffff;
+  --min-space-1:0.5rem;
   --space-1: 1rem;
   --space-2: 1.2rem;
+  --font-roboto: 'Roboto', sans-serif;
 }
 body{
   margin: 0;
   padding: 0;
   background: var(--primary-color-1);
-  font-family: Arial, Helvetica, sans-serif
+  font-family: var(--font-roboto);
 }
