@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { FC, ReactNode } from 'react'
 import styles from "./header.module.css"
 import {BsGearFill} from "react-icons/bs"
 import Button from './Button'
-const Header = () => {
+
+interface Props {
+    children: ReactNode
+}
+
+const Header:FC<Props> = ({children}) => {
   return (
     <div className={styles.container}>
         <header className={styles.header}>
@@ -11,9 +16,12 @@ const Header = () => {
             </div>
             <BsGearFill className={styles.gear_icon}/>
         </header>
+        <div style={{display: "flex", flexDirection: "column",width:"100%",height:"100%" }}>
         <div className={styles.in_out_buttons}>
             <Button style="bordered">Sing in</Button>
             <Button>Sing up</Button>
+        </div>
+        {children}
         </div>
     </div>
   )

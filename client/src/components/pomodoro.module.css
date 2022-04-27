@@ -1,0 +1,40 @@
+.pomodoro{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 0 var(--space-2);
+}
+.start_button{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background-color: var(--secondary-color-2);
+    border: none;
+    box-shadow: 4px 4px 0 2px #C08F00, 0px 4px 4px #00000014;
+    margin: var(--space-1);
+    outline: none;
+}
+.start_button:hover{
+    cursor: pointer;
+}
+.start_button:active{
+    box-shadow: 2px 2px 0 2px #C08F00, -3px 0px 5px 1px #00000024;
+     top: 2px;
+     left: 2px;
+}
+.config_icon{
+    color: var(--secondary-color-2);
+    font-size: 22px;
+    margin: 0 0 0 var(--space-2);
+}
+.main_part{
+    display: flex;
+    align-items: center;
+    margin: 0 0 var(--space-2) 0;
+}
