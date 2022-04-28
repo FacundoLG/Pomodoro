@@ -1,0 +1,6 @@
+.progress_bar > path{
+    stroke-dasharray: 1000;
+}
+.progress_bar > path {
+    transition: 500ms;   
+}
