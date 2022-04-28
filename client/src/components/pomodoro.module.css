@@ -13,7 +13,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: var(--space-2);
 }
 .clock{
     position: relative;
@@ -54,3 +53,13 @@
     cursor: pointer;
 }
 /* Clock */
+.stages{
+    display: flex;
+}
+.stages div {
+    width: 10px;
+    height: 10px;
+    background-color: var(--secondary-color-1);
+    border-radius: 50%;
+    margin: var(--min-space-1);
+}
