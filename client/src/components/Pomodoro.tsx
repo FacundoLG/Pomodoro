@@ -8,54 +8,98 @@ type PomodoroPage = "home" | "clock"
 
 interface Stage {
     name: "Long break" | "Short break" | "Pomodoro"
-    duration_seg: number
+    duration_sec: number
     status: "active" | "waiting" | "finished"
+}
+
+interface ActualStageMetaData {
+    stage: Stage
+    stage_index: number
+    stages_length: number
+}
+
+interface ClockTime {
+    minutes: string,
+    seconds: string
 }
 
 const stagesMock: Array<Stage> = [
     {
         name: "Pomodoro",
-        duration_seg: 1800,
+        duration_sec: 20,
         status: "waiting" 
     },
     {
         name: "Short break",
-        duration_seg: 300,
+        duration_sec: 10,
         status: "waiting"
     },
     {
         name: "Pomodoro",
-        duration_seg: 1800,
+        duration_sec: 20,
         status: "waiting"
     },
     {
         name: 'Long break',
-        duration_seg: 600,
+        duration_sec: 10,
         status: "waiting"
     },
 ]
 
+ 
+
 const Pomodoro:FC = () => {
   const [pomodoroPage,setPomodoroPage] = useState<PomodoroPage>("home")
   const [stages,setStages] = useState<Array<Stage>>(stagesMock)
-  const [clockTime,setClockTime] = useState<string>("")
+  const [actualStage,setActualStage] = useState<ActualStageMetaData>()
+  const [isStageFinished,setIsStageFinished] = useState<boolean>(true)
+  const [clockTime,setClockTime] = useState<ClockTime>()
   const startGame = () => {
       setPomodoroPage("clock")
-      startClock(stages)
-}
-  const startClock = (stages:Array<Stage>) => {
-    stages.map((stage) => {
-        if(stage.status !== "waiting"){
-            let segs = stage.duration_seg
-             setInterval(() => {    
-                const minutes = Math.floor(segs / 60)
-                console.log(segs / 60)
-                setClockTime((minutes).toString() )
-                segs--
-            },1000)
-        }
-    })
+      setActualStage({
+          stage: stages[0],
+          stage_index: 0,
+          stages_length: stages.length 
+      })
   }
+
+  function fix_one_digit (num:number): string {
+    if (num >= 0 && num < 10){
+        return "0"+(num.toString()) 
+    }
+    return num.toString()
+  } 
+
+  useEffect(() => {
+    if (!actualStage) return
+    let seg = actualStage.stage.duration_sec
+    const clockInterval = setInterval(() => {
+        if(seg <= 0){
+            if(actualStage.stage_index == actualStage.stages_length - 1){
+                setPomodoroPage("home")   
+            }
+            else{
+                setActualStage({
+                    ...actualStage,
+                    stage: stages[actualStage.stage_index + 1],
+                    stage_index: actualStage.stage_index + 1,
+                })
+            }
+            clearInterval(clockInterval)
+        }
+        const minutes = Math.floor(seg / 60)
+        const seconds = seg - 60 * minutes
+        setClockTime({
+            minutes: fix_one_digit(minutes),
+            seconds: fix_one_digit(seconds)
+        })
+        seg--
+        return () => {
+            clearInterval(clockInterval)
+        }
+    },1000)
+  
+  },[actualStage])
 
 
   return (
@@ -74,7 +118,7 @@ const Pomodoro:FC = () => {
                 pomodoroPage == "clock" &&
                 <>
                 <div className={styles.clock}>
-                    <ProgressBar percentage={90} minutes={clockTime} seconds={"00"}/>
+                    <ProgressBar percentage={90} minutes={clockTime?.minutes} seconds={clockTime?.seconds}/>
                 </div>
                 </>
             }
