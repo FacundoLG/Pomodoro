@@ -63,3 +63,6 @@
     border-radius: 50%;
     margin: var(--min-space-1);
 }
+.stages > .active_stage{
+    background-color: var(--secondary-color-2);
+} 

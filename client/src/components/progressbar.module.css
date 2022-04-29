@@ -17,7 +17,7 @@
     stroke-linecap: round;
 }
 .progress_bar > path {
-    transition: 500ms;   
+    transition: 500ms linear; 
 }
 .progress_time{
     font-size: 50px;
