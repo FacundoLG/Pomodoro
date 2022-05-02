@@ -7,12 +7,19 @@
     align-items: center;
     padding: 0 var(--space-2);
 }
-
+.data{
+    height: 30px;
+    margin: 0 0 var(--space-1) 0;
+}
 .main_part{
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: fit-content;
+}
+.controler{
+    height: 20%;
 }
 .clock{
     position: relative;
@@ -29,6 +36,9 @@
     margin: var(--space-1);
 }
 /* Home */
+.pomodoro_clock{
+    box-shadow: inset 0px 0px 10px 2px #00000089;
+}
 .start_button{
     box-shadow: 4px 4px 0 2px #C08F00, 0px 4px 4px #00000014;
 }
@@ -65,4 +75,9 @@
 }
 .stages > .active_stage{
     background-color: var(--secondary-color-2);
+}
+.stage_name{
+    color: var(--font-color-1);
+    font-size: 18px;
+    font-weight: 500;
 } 
