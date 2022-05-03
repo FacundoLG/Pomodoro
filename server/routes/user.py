@@ -1,9 +1,13 @@
 #Python
 
 #FastAPI
+from select import select
 from fastapi import APIRouter, Form,HTTPException,status
 from pydantic import EmailStr
+#DB
+from config.db import conn
 #Shemas
+from models.user import users
 
 users_route = APIRouter(prefix="/users")
 
@@ -34,7 +38,12 @@ def register(
         min_length=password_min_length,
         example="sdfgklgf.edfrkjih"
         ),
-    confirmation_password: str = Form(...),
+    confirmation_password: str = Form(
+        ...,
+        max_length=password_max_length,
+        min_length=password_min_length,
+        example="sdfgklgf.edfrkjih"
+        ),
     email: EmailStr = Form(...),
     first_name:str = Form(
         ...,
@@ -61,7 +70,8 @@ def register(
                 "confirmation_password": "Not equal to password"
             }
         )
-
+    found_users = conn.execute(users.select()).fetchall()
+    return found_users
 @users_route.post(
     path="login",
     response_model=None,
@@ -83,6 +93,5 @@ def login(
         min_length=password_min_length,
         example="sdfgklgf.edfrkjih"
         ),
-    confirmation_password: str = Form(...),
     ):
     pass
