@@ -1,9 +1,9 @@
 #Python
 
 #FastAPI
-from select import select
 from fastapi import APIRouter, Form,HTTPException,status
 from pydantic import EmailStr
+from sqlalchemy import or_
 #DB
 from config.db import conn
 #Shemas
@@ -70,8 +70,19 @@ def register(
                 "confirmation_password": "Not equal to password"
             }
         )
-    found_users = conn.execute(users.select().where(users.c.username == username)).fetchall()
-    return found_users
+    found_users = conn.execute(users.select().where(or_(users.c.username == username, users.c.email == email) )).fetchall()
+    if len(found_users) >=1:
+        print(found_users)
+        error_detail = {}
+        if found_users[0]["username"] == username:
+            error_detail["username"] = "This username is not available"
+        if found_users[0]["email"] == email:
+            error_detail["email"] = "This email is already used"
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=error_detail
+            )
+    conn.execute(users.insert().values(username=username,password=password,first_name=first_name,email=email,last_name=last_name))
 @users_route.post(
     path="login",
     response_model=None,
