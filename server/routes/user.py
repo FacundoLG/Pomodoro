@@ -70,7 +70,7 @@ def register(
                 "confirmation_password": "Not equal to password"
             }
         )
-    found_users = conn.execute(users.select()).fetchall()
+    found_users = conn.execute(users.select().where(users.c.username == username)).fetchall()
     return found_users
 @users_route.post(
     path="login",
