@@ -1,6 +1,7 @@
 #Python
 
 #FastAPI
+from urllib import response
 from fastapi import APIRouter, Form,HTTPException,status
 from pydantic import EmailStr
 from sqlalchemy import or_
@@ -8,6 +9,8 @@ from sqlalchemy import or_
 from config.db import conn
 #Shemas
 from models.user import users
+
+from lib.hash import check_password_match,generate_password
 
 users_route = APIRouter(prefix="/users")
 
@@ -82,7 +85,9 @@ def register(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=error_detail
             )
-    conn.execute(users.insert().values(username=username,password=password,first_name=first_name,email=email,last_name=last_name))
+
+    hashed_password = generate_password(password).decode("utf-8")
+    conn.execute(users.insert().values(username=username,password=hashed_password,first_name=first_name,email=email,last_name=last_name))
 @users_route.post(
     path="login",
     response_model=None,
@@ -105,4 +110,17 @@ def login(
         example="sdfgklgf.edfrkjih"
         ),
     ):
-    pass
+    fetched_user = conn.execute(users.select().where(users.c.username == username)).fetchall()
+    if len(fetched_user) == 1:
+        user = fetched_user[0]
+        if check_password_match(password,user.password):
+            return {
+                "message":"Si sos"
+            }
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail={
+                "message":"no sos"
+            }
+        )
