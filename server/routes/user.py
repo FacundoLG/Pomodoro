@@ -1,16 +1,18 @@
 #Python
 
 #FastAPI
-from urllib import response
 from fastapi import APIRouter, Form,HTTPException,status
 from pydantic import EmailStr
 from sqlalchemy import or_
 #DB
 from config.db import conn
+from lib.token import decode_user_token, encode_user_data
 #Shemas
 from models.user import users
 
 from lib.hash import check_password_match,generate_password
+from schemas.response import Response, ResponseError,ResponseToken
+from schemas.user import UserInToken
 
 users_route = APIRouter(prefix="/users")
 
@@ -90,7 +92,7 @@ def register(
     conn.execute(users.insert().values(username=username,password=hashed_password,first_name=first_name,email=email,last_name=last_name))
 @users_route.post(
     path="login",
-    response_model=None,
+    response_model=ResponseToken,
     status_code=status.HTTP_200_OK,
     summary="Authenticates a user",
     tags=["users"]
@@ -114,13 +116,21 @@ def login(
     if len(fetched_user) == 1:
         user = fetched_user[0]
         if check_password_match(password,user.password):
-            return {
-                "message":"Si sos"
+            user:UserInToken = {
+                "username": user.username,
+                "first_name": user.first_name,
+                "last_name": user.last_name
             }
+            token = encode_user_data(user)
+            decode_user_token(token)
+            return ResponseToken(
+                message="User authenticated", 
+                data={
+                       "token": token
+                     }
+                )
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail={
-                "message":"no sos"
-            }
+            detail=ResponseError(error="User not found")
         )

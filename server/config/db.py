@@ -1,11 +1,12 @@
 from sqlalchemy import create_engine, MetaData
-from dotenv import dotenv_values
-
+from config.config import config
 URI = None
-MODE = dotenv_values()["MODE"]
+
+MODE = config["MODE"]
 
 if MODE == "Development":
-    URI = dotenv_values()["LOCAL_URI"]
+    print("INFO:     Using local DATABASE")
+    URI = config["LOCAL_URI"]
 
 engine = create_engine(URI)
 meta = MetaData()
