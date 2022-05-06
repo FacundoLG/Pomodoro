@@ -26,7 +26,7 @@ name_min_length = 2
     response_model=None,
     status_code=status.HTTP_201_CREATED,
     summary="Save a user in a database",
-    tags=["users"]
+    tags=["Users"]
     )
 def register(
     username: str = Form(
@@ -64,7 +64,7 @@ def register(
     """ 
         ## Save a user in a database
          
-        ### If there is an error in any input, it will raise an error with the field as a key and a message as a value
+        ## If there is an error in any input, it will raise an error with the field as a key and a message as a value
     """
     if not password == confirmation_password:
         raise HTTPException(
@@ -82,18 +82,20 @@ def register(
         if found_users[0]["email"] == email:
             error_detail["email"] = "This email is already used"
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail=error_detail
             )
 
     hashed_password = Auth().hash_password(password).decode("utf-8")
     conn.execute(users.insert().values(username=username,password=hashed_password,first_name=first_name,email=email,last_name=last_name))
+    return Response(message="User created successfully")
+
 @users_route.post(
-    path="login",
+    path="/login",
     response_model=ResponseToken,
     status_code=status.HTTP_200_OK,
     summary="Authenticates a user",
-    tags=["users"]
+    tags=["Users"]
 )
 
 def login(
@@ -110,11 +112,16 @@ def login(
         example="sdfgklgf.edfrkjih"
         ),
     ):
+    """ 
+    # Login
+    ## This function gets a user based on the given username, then check if exist and compare the passwords, if all is okey, will return a token
+    """
     fetched_user = conn.execute(users.select().where(users.c.username == username)).fetchall()
     if len(fetched_user) == 1:
         user = fetched_user[0]
         if Auth().check_password_match(password,user.password):
             user:UserInToken = {
+                "id": user.id,
                 "username": user.username,
                 "first_name": user.first_name,
                 "last_name": user.last_name

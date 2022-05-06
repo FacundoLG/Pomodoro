@@ -1,4 +1,3 @@
-from curses import meta
 from sqlalchemy import TEXT, VARCHAR, Integer, Table, Column
 from config.db import meta,engine
 users = Table("users",meta,

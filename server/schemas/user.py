@@ -9,6 +9,7 @@ class User(BaseModel):
     email: str
 
 class UserInToken(BaseModel):
-    username: str
+    id: str
+    username:str
     first_name: str
     last_name: str
