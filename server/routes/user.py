@@ -6,11 +6,9 @@ from pydantic import EmailStr
 from sqlalchemy import or_
 #DB
 from config.db import conn
-from lib.token import decode_user_token, encode_user_data
+from lib.auth import Auth
 #Shemas
 from models.user import users
-
-from lib.hash import check_password_match,generate_password
 from schemas.response import Response, ResponseError,ResponseToken
 from schemas.user import UserInToken
 
@@ -88,7 +86,7 @@ def register(
             detail=error_detail
             )
 
-    hashed_password = generate_password(password).decode("utf-8")
+    hashed_password = Auth().hash_password(password).decode("utf-8")
     conn.execute(users.insert().values(username=username,password=hashed_password,first_name=first_name,email=email,last_name=last_name))
 @users_route.post(
     path="login",
@@ -115,14 +113,14 @@ def login(
     fetched_user = conn.execute(users.select().where(users.c.username == username)).fetchall()
     if len(fetched_user) == 1:
         user = fetched_user[0]
-        if check_password_match(password,user.password):
+        if Auth().check_password_match(password,user.password):
             user:UserInToken = {
                 "username": user.username,
                 "first_name": user.first_name,
                 "last_name": user.last_name
             }
-            token = encode_user_data(user)
-            decode_user_token(token)
+            token = Auth().encode_user_data(user)
+            Auth().decode_user_token(token)
             return ResponseToken(
                 message="User authenticated", 
                 data={

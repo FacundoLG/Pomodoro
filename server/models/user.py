@@ -8,6 +8,6 @@ users = Table("users",meta,
     Column("password",TEXT,nullable=False),
     Column("first_name",VARCHAR(30)),
     Column("last_name",VARCHAR(30))
-    ,extend_existing=True
+    ,extend_existing=True,
 )
 meta.create_all(engine)
