@@ -6,9 +6,10 @@
     justify-content: center;
     align-items: center;
     padding: 0 var(--space-2);
+    margin-bottom: 40px;
 }
 .data{
-    height: 30px;
+    height: 20px;
     margin: 0 0 var(--space-1) 0;
 }
 .main_part{
@@ -18,8 +19,11 @@
     align-items: center;
     height: fit-content;
 }
-.controler{
-    height: 20%;
+.controller{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 30px;
 }
 .clock{
     position: relative;
@@ -36,23 +40,13 @@
     margin: var(--space-1);
 }
 /* Home */
-.pomodoro_clock{
-    box-shadow: inset 0px 0px 10px 2px #00000089;
-}
-.start_button{
-    box-shadow: 4px 4px 0 2px #C08F00, 0px 4px 4px #00000014;
-}
+
 .start_button > img{
     width: 30%;
     height: 30%;
 }
 .start_button:hover{
     cursor: pointer;
-}
-.start_button:active{
-    box-shadow: 2px 2px 0 2px #C08F00, -3px 0px 5px 1px #00000024;
-     top: 2px;
-     left: 2px;
 }
 .config_icon{
     color: var(--secondary-color-2);
@@ -65,6 +59,7 @@
 /* Clock */
 .stages{
     display: flex;
+    margin: 0 0 var(--min-space-1) 0;
 }
 .stages div {
     width: 10px;

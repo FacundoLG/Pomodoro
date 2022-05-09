@@ -1,6 +1,6 @@
 /* Components */
 import { FC, useEffect, useState } from 'react'
-import { BsGearFill } from 'react-icons/bs'
+import { BsGearFill, BsX } from 'react-icons/bs'
 /* IMG - SVG */
 import PlayIMG from "../assets/images/Play_icon.png"
 import ProgressBar from './ProgressBar'
@@ -10,7 +10,11 @@ import Sound2 from "../assets/sounds/sound-2.wav"
 import Sound3 from "../assets/sounds/sound-3.wav"
 /* Styles */
 import styles from "./pomodoro.module.css"
-type PomodoroPage = "home" | "clock"
+import Button from './Button'
+
+import {calculate_percentage,fix_one_digit,sec_with_minutes} from '../utils/clock'
+
+type pomodoroState = "awaiting" | "active"
 
 interface Stage {
     name: "Long break" | "Short break" | "Pomodoro"
@@ -18,7 +22,7 @@ interface Stage {
     status: "active" | "waiting" | "finished"
 }
 
-interface ActualStageMetaData {
+interface ActualStageWithMetaData {
     stage: Stage
     stage_index: number
     stages_length: number
@@ -27,48 +31,50 @@ interface ActualStageMetaData {
 interface ClockData {
     minutes: string,
     seconds: string,
-    percentage: number
+    percentage: number,
+    index?: number,
+    name?: string
 }
-
+const lessValue = 30
 const stagesMock: Array<Stage> = [
     {
         name: "Pomodoro",
-        duration_sec: 1500,
+        duration_sec: 1500 / lessValue,
         status: "waiting" 
     },
     {
         name: "Short break",
-        duration_sec: 300,
+        duration_sec: 300 / lessValue,
         status: "waiting"
     },
     {
         name: "Pomodoro",
-        duration_sec: 1500,
+        duration_sec: 1500 / lessValue,
         status: "waiting"
     },
     {
         name: 'Short break',
-        duration_sec: 300,
+        duration_sec: 300 / lessValue,
         status: "waiting"
     },
     {
         name: 'Pomodoro',
-        duration_sec: 1500,
+        duration_sec: 1500 / lessValue,
         status: "waiting"
     },
     {
         name: 'Short break',
-        duration_sec: 300,
+        duration_sec: 300 / lessValue,
         status: "waiting"
     },
     {
         name: 'Pomodoro',
-        duration_sec: 1500,
+        duration_sec: 1500 / lessValue,
         status: "waiting"
     },
     {
         name: 'Long break',
-        duration_sec: 1200,
+        duration_sec: 1200 / lessValue,
         status: "waiting"
     }, 
 ]
@@ -76,108 +82,92 @@ const stagesMock: Array<Stage> = [
  
 
 const Pomodoro:FC = () => {
-  const [pomodoroPage,setPomodoroPage] = useState<PomodoroPage>("home")
-  const [stages,setStages] = useState<Array<Stage>>(stagesMock)
-  const [actualStage,setActualStage] = useState<ActualStageMetaData>()
+  const [pomodoroState,setPomodoroState] = useState<pomodoroState>("awaiting")
+  const [pomodoroStages,setPomodoroStages] = useState<Array<Stage>>(stagesMock)
   const [clockData,setClockData] = useState<ClockData>()
-  const startGame = () => {
-      setPomodoroPage("clock")
-      setActualStage({
-          stage: stages[0],
-          stage_index: 0,
-          stages_length: stages.length 
-      })
+  const startPomodoro = () => {
+      setPomodoroState("active") 
   }
 
-  function fix_one_digit (num:number): string {
-    if (num >= 0 && num < 10){
-        return "0"+(num.toString()) 
-    }
-    return num.toString()
-} 
+  const stopPomodoro = () => {
+      setPomodoroState("awaiting")
+  }
 
-useEffect(() => {
-    if (!actualStage) return
-    const start_sound = new Audio(Sound3)
-    start_sound.play()
-    let seg = actualStage.stage.duration_sec
-    const clockInterval = setInterval(() => {
-          if(seg <= 0){
-              if(actualStage.stage_index == actualStage.stages_length - 1){
-                const finish_clock_sound = new Audio(Sound)
-                finish_clock_sound.play()  
-                setPomodoroPage("home")
-                  document.title = "Pomodoro" 
-              }
-              else{
-                  const finish_stage_sound = new Audio(Sound2)
-                  finish_stage_sound.play()
-                   setActualStage({
-                          ...actualStage,
-                          stage: stages[actualStage.stage_index + 1],
-                          stage_index: actualStage.stage_index + 1,
-                      })
-              }
-              clearInterval(clockInterval)
-          }
-          const percentage = seg/ ((actualStage.stage.duration_sec) / 100)
-          console.log(percentage)
-          const minutes = Math.floor(seg / 60)
-          const seconds = seg - 60 * minutes
-          document.title = `${fix_one_digit(minutes)}:${fix_one_digit(seconds)}-${actualStage.stage.name}`
-          setClockData({
-              minutes: fix_one_digit(minutes),
-              seconds: fix_one_digit(seconds),
-              percentage
+  useEffect(() => {
+        let stage= pomodoroStages[0]
+        let stage_index= 0
+        const stages_length= pomodoroStages.length
+        let sec: number = stage.duration_sec || 1
+        const clockInterval = setInterval(() => {
+            const {minutes,seconds} = sec_with_minutes(sec)
+            const percentage = calculate_percentage(sec,stage.duration_sec || 0)
+            const fixed_minutes =fix_one_digit(minutes)
+            const fixed_seconds =fix_one_digit(seconds)
+            console.log(minutes,seconds,percentage)
+            setClockData({
+                minutes: fixed_minutes,
+                seconds: fixed_seconds,
+                percentage: percentage,
+                index: stage_index,
+                name:stage.name
             })
-          seg--
-            return () => {
-            clearInterval(clockInterval)
-            setPomodoroPage("clock")
-        }
-    },1000)
+            if (pomodoroState == "awaiting") {
+                clearInterval(clockInterval)
+                return
+            }
+            document.title = `${fixed_minutes}:${fixed_seconds}-${stage.name}`
+            if (sec <= 0) {
+                stage_index++
+                if (stage_index > stages_length - 1){
+                    stopPomodoro()
+                    return
+                }
+                stage = pomodoroStages[stage_index]
+                sec = stage.duration_sec
+            }
+            sec--
+            },1000)
+      return () => {
+          clearInterval(clockInterval)
+          document.title="Pomodoro"
+      }
+  },[pomodoroState])
   
-  },[actualStage])
-
-
   return (
-    <div className={styles.pomodoro}>
+      <div className={styles.pomodoro}>
         <div className={styles.data}>
             {
-                pomodoroPage === "clock" &&
-                <p className={styles.stage_name}>{actualStage?.stage.name}</p>   
+            pomodoroState === "active" &&
+                <p className={styles.stage_name}>{clockData?.name}</p>   
             }
         </div>
         <div className={styles.main_part}>
-            {pomodoroPage == "home" &&
+            <div className={`${styles.clock} ${ styles.start_button} ` } onClick={() => {startPomodoro()} }>
+            { pomodoroState == "awaiting"?
                <>
-                    <div className={`${styles.clock} ${ styles.start_button} ` } onClick={() => {startGame()} }>
                         <img src={PlayIMG} alt="" />
-                    </div>
                </>
-            }
-            {
-                pomodoroPage == "clock" &&
+                :
                 <>
-                <div className={`${styles.clock} ${styles.pomodoro_clock}`}>
-                    <ProgressBar percentage={clockData?.percentage || 0} minutes={clockData?.minutes} seconds={clockData?.seconds}/>
-                </div>
+                    <ProgressBar percentage={clockData?.percentage || 1} minutes={clockData?.minutes} seconds={clockData?.seconds} />
                 </>
             }
+            </div>
         </div>
         <div className={styles.controller}>
-            {pomodoroPage == "home" &&
+            { pomodoroState == "awaiting"?
                 <div>
                     <BsGearFill className={styles.config_icon}/>
                 </div>
-            }
-            {
-                pomodoroPage == "clock" &&
-                <div className={styles.stages}>
-                    {stagesMock.map((stage,i) => 
-                        <div key={i+ "stage"} className={`${i === actualStage?.stage_index && styles.active_stage}`} ></div>
-                    )}
-                </div>
+                :
+                <>
+                    <div className={styles.stages}>
+                        {stagesMock.map((stage,i) => 
+                            <div key={i+ "stage"} className={`${i === clockData?.index && styles.active_stage}`} ></div>
+                            )}
+                    </div> 
+                    <Button style='fill' onClick={()=>{ stopPomodoro()}} ><BsX/></Button>
+                </>
             }
         </div>
     </div>
