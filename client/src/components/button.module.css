@@ -33,8 +33,9 @@
 .icon{
     color: var(--secondary-color-2);
     font-size: 23px;
-    background-color: #ffffff11;
-    margin: 0;
+    background-color: #ffffff09;
+    margin: 0 0 0 var(--min-space-1);
+    padding: var(--min-space-1);
 }
 .button:hover{
     cursor: pointer;

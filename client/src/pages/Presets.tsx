@@ -4,24 +4,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import Button from '../components/Button'
 import { SET_PRESETS } from '../redux/types'
 import styles from "./presets.module.css"
+import { Preset as PresetType } from '../types'
+import Preset from '../components/Preset'
 
-interface Preset {
-    id?: number
-    name: string
-    pomodoro_time: number
-    short_break_time: number
-    long_break_time: number
-    shorts_per_long: number
-}
 
 const Presets = () => {
     const {presets} = useSelector((state:any) => state)
     console.log(presets)
     const dispatch = useDispatch()
 
-    let localPresets:Array<Preset> = JSON.parse(localStorage.getItem("presets") || "[]" ) 
+    let localPresets:Array<PresetType> = JSON.parse(localStorage.getItem("presets") || "[]" ) 
    
-    const [savedPresets,setSavedPresets] = useState<Array<Preset>>(localPresets)
+    const [savedPresets,setSavedPresets] = useState<Array<PresetType>>(localPresets)
     const [pomodoroTime,setPomodoroTime] = useState(30)
     const [shortBreakTime,setShortBreakTime] = useState(5)
     const [longBreakTime,setLongBreakTime] = useState(20)
@@ -33,14 +27,14 @@ const Presets = () => {
     // 
 
     const savePreset = () => {
-     const newPreset:Preset = {
+     const newPreset:PresetType = {
         name: "new preset",
         pomodoro_time: pomodoroTime,
         short_break_time: shortBreakTime,
         long_break_time: longBreakTime,
         shorts_per_long: shortsPerLong
      } 
-     const storePresets:Array<Preset> = presets.presets
+     const storePresets:Array<PresetType> = presets.presets
      storePresets.push(newPreset)
      localStorage.setItem("presets",JSON.stringify(storePresets))
      dispatch({
@@ -93,11 +87,8 @@ const Presets = () => {
                 </div>
             </div>
             <div className={styles.presets_list}>
-                {savedPresets.map((data:Preset,index) => 
-                    <div key={data.name + "_" + index}>
-                        <p>{data.name}</p>
-                        <p>{((data.pomodoro_time + data.short_break_time) * 2 + data.long_break_time) + " minutes"  }</p>
-                    </div>
+                {savedPresets.map((data:PresetType,index) => 
+                   <Preset key={data.name + "_" + index} {...data} />
                 )}
             </div>
         </div>
