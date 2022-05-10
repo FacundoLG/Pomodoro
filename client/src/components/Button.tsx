@@ -1,7 +1,7 @@
 import { FC, MouseEventHandler, ReactNode, } from "react"
 import styles from "./button.module.css"
 
-type Style = "fill" | "bordered" | "danger"
+type Style = "fill" | "bordered" | "danger" | "icon"
 
 interface Props {
     children:ReactNode
@@ -11,7 +11,7 @@ interface Props {
 
 const Button:FC<Props> = ({children,onClick,style}) => {
   return (
-    <button className={`${styles.button} ${style == "bordered"? styles.bordered : style == "danger"? styles.danger :  styles.fill }`} onClick={onClick && onClick}>{children}</button>
+    <button className={`${styles.button} ${style == "bordered"? styles.bordered : style == "danger"? styles.danger : style == "icon"? styles.icon :  styles.fill }`} onClick={onClick && onClick}>{children}</button>
   )
 }
 

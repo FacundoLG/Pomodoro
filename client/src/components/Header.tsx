@@ -1,8 +1,9 @@
 import React, { FC, ReactNode } from 'react'
 import styles from "./header.module.css"
-import {BsGearFill} from "react-icons/bs"
+import {BsGearFill, BsHouse} from "react-icons/bs"
 import Button from './Button'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 interface Props {
     children: ReactNode
 }
@@ -16,14 +17,29 @@ const Header:FC<Props> = ({children}) => {
         <header className={styles.header}>
         {
         isLogged &&
+         <>
             <div>
                 <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
             </div>
+            {/* <BsGearFill className={styles.gear_icon}/>
+             */}
+             <Link to="/pomodoro">
+                <BsHouse className={styles.gear_icon} />
+             </Link>
+         </>
         }
-            <BsGearFill className={styles.gear_icon}/>
         </header>
         <div style={{display: "flex", flexDirection: "column",width:"100%",height:"100%" }}>
         <div className={styles.in_out_buttons}>
+            {
+                !isLogged?
+                <Link to={"/pomodoro"} style={{textDecoration:"none"}} >
+                    <p className={styles.pomodoro}>Pomodoro</p>
+                </Link>
+                : 
+                <div></div>
+            }
+            <div>
             {
                 isLogged ?
                 <Button style='danger'>Log out</Button>
@@ -33,6 +49,7 @@ const Header:FC<Props> = ({children}) => {
                     <Button>Sing up</Button>
                 </>
             }
+            </div>
         </div>
         {children}
         </div>

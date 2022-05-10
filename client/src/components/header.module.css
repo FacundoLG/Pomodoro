@@ -9,7 +9,17 @@
     width: 100%;
     align-items: center;
     padding: var(--space-1);
-    justify-content: flex-end;
+    justify-content: space-between;
+    margin: 0 0 0 auto;
+}
+.in_out_buttons div{
+    display: flex;
+}
+.pomodoro{
+    font-weight: 600;
+    color: var(--secondary-color-2);
+    font-size: 23px;
+    margin: 0 0 0 var(--min-space-1);
 }
 .header{
     position: absolute;

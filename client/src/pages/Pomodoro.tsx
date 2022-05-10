@@ -1,18 +1,19 @@
 /* Components */
 import { FC, useEffect, useState } from 'react'
 import { BsGearFill, BsX } from 'react-icons/bs'
+import ProgressBar from '../components/ProgressBar'
+import Button from '../components/Button'
 /* IMG - SVG */
 import PlayIMG from "../assets/images/Play_icon.png"
-import ProgressBar from './ProgressBar'
 /* Sounds */
 import Sound from "../assets/sounds/sound-1.wav"
 import Sound2 from "../assets/sounds/sound-2.wav"
 import Sound3 from "../assets/sounds/sound-3.wav"
 /* Styles */
 import styles from "./pomodoro.module.css"
-import Button from './Button'
 
 import {calculate_percentage,fix_one_digit,sec_with_minutes} from '../utils/clock'
+import { Link } from 'react-router-dom'
 
 type pomodoroState = "awaiting" | "active"
 
@@ -20,12 +21,6 @@ interface Stage {
     name: "Long break" | "Short break" | "Pomodoro"
     duration_sec: number
     status: "active" | "waiting" | "finished"
-}
-
-interface ActualStageWithMetaData {
-    stage: Stage
-    stage_index: number
-    stages_length: number
 }
 
 interface ClockData {
@@ -86,10 +81,16 @@ const Pomodoro:FC = () => {
   const [pomodoroStages,setPomodoroStages] = useState<Array<Stage>>(stagesMock)
   const [clockData,setClockData] = useState<ClockData>()
   const startPomodoro = () => {
+      const start = new Audio(Sound2)
+      start.volume = 0.8
+      start.play()
       setPomodoroState("active") 
   }
 
   const stopPomodoro = () => {
+      const stop = new Audio(Sound)
+      stop.volume = 0.8
+      stop.play()
       setPomodoroState("awaiting")
   }
 
@@ -122,6 +123,9 @@ const Pomodoro:FC = () => {
                     stopPomodoro()
                     return
                 }
+                const next_stage_sound = new Audio(Sound3)
+                next_stage_sound.volume = 0.8
+                next_stage_sound.play()
                 stage = pomodoroStages[stage_index]
                 sec = stage.duration_sec
             }
@@ -157,7 +161,9 @@ const Pomodoro:FC = () => {
         <div className={styles.controller}>
             { pomodoroState == "awaiting"?
                 <div>
-                    <BsGearFill className={styles.config_icon}/>
+                    <Link to={"presets"}>
+                        <BsGearFill className={styles.config_icon}/>
+                    </Link>
                 </div>
                 :
                 <>
@@ -166,7 +172,7 @@ const Pomodoro:FC = () => {
                             <div key={i+ "stage"} className={`${i === clockData?.index && styles.active_stage}`} ></div>
                             )}
                     </div> 
-                    <Button style='fill' onClick={()=>{ stopPomodoro()}} ><BsX/></Button>
+                    <Button style='danger' onClick={()=>{ stopPomodoro()}} ><BsX/></Button>
                 </>
             }
         </div>
