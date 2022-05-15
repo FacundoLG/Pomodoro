@@ -5,7 +5,7 @@ import Button from './Button'
 import { BsPlay, BsX } from 'react-icons/bs'
 
 interface PresetComponent extends PresetType{
-    onPlay: () => void
+    onPlay: (preset_data:PresetType) => void
     onDelete: (id:string | number | undefined) => void
     onEdit: () => void
 }
@@ -13,7 +13,7 @@ interface PresetComponent extends PresetType{
 const Preset:FC<PresetComponent> = (props) => {
   const {
     long_break_time,name,pomodoro_time,short_break_time,
-    shorts_per_long,id,local_id,user_id
+    shorts_per_long,id,user_id
   } = props
   const calculateTime = () => {
     return (pomodoro_time + short_break_time) * shorts_per_long + pomodoro_time + long_break_time    
@@ -25,7 +25,7 @@ const Preset:FC<PresetComponent> = (props) => {
             <p>{calculateTime() + " Minutes"}</p>
         </div>
         <div>
-            <Button style='icon'onClick={() => { props.onDelete(props.local_id)}} > <BsX/> </Button>
+            <Button style='icon' onClick={() => { props.onDelete(props.id)}} > <BsX/> </Button>
             <Button style='icon'> <BsPlay/> </Button>
         </div>
     </div>

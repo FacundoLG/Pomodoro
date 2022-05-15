@@ -14,13 +14,14 @@ import styles from "./pomodoro.module.css"
 
 import {calculate_percentage,fix_one_digit,sec_with_minutes} from '../utils/clock'
 import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Preset } from '../types'
 
 type pomodoroState = "awaiting" | "active"
 
 interface Stage {
     name: "Long break" | "Short break" | "Pomodoro"
     duration_sec: number
-    status: "active" | "waiting" | "finished"
 }
 
 interface ClockData {
@@ -30,47 +31,40 @@ interface ClockData {
     index?: number,
     name?: string
 }
-const lessValue = 30
+const lessValue = 1
 const stagesMock: Array<Stage> = [
     {
         name: "Pomodoro",
         duration_sec: 1500 / lessValue,
-        status: "waiting" 
+
     },
     {
         name: "Short break",
         duration_sec: 300 / lessValue,
-        status: "waiting"
     },
     {
         name: "Pomodoro",
         duration_sec: 1500 / lessValue,
-        status: "waiting"
     },
     {
         name: 'Short break',
         duration_sec: 300 / lessValue,
-        status: "waiting"
     },
     {
         name: 'Pomodoro',
         duration_sec: 1500 / lessValue,
-        status: "waiting"
     },
     {
         name: 'Short break',
         duration_sec: 300 / lessValue,
-        status: "waiting"
     },
     {
         name: 'Pomodoro',
         duration_sec: 1500 / lessValue,
-        status: "waiting"
     },
     {
         name: 'Long break',
         duration_sec: 1200 / lessValue,
-        status: "waiting"
     }, 
 ]
 
@@ -78,9 +72,46 @@ const stagesMock: Array<Stage> = [
 
 const Pomodoro:FC = () => {
   const [pomodoroState,setPomodoroState] = useState<pomodoroState>("awaiting")
-  const [pomodoroStages,setPomodoroStages] = useState<Array<Stage>>(stagesMock)
+  const [pomodoroStages,setPomodoroStages] = useState<Array<Stage>>()
   const [clockData,setClockData] = useState<ClockData>()
+  const {presets} = useSelector((state:any) => state)
+  const activePresetToStages = () => {
+      const minutesToSeconds = (minutes:number) => {
+        const seconds: number = minutes * 60
+        return seconds
+    }
+
+    let newStage:Stage[] = []    
+    const active_preset:Preset = presets.active_preset
+    if (active_preset){
+        for(let i = 1;i <= active_preset.shorts_per_long ; i++){
+            newStage.push({
+                name: "Pomodoro",
+                duration_sec: minutesToSeconds(active_preset.pomodoro_time)
+            })
+            newStage.push({
+                name: "Pomodoro",
+                duration_sec: minutesToSeconds(active_preset.short_break_time)
+            })
+        }
+        newStage.push({
+            name:"Pomodoro",
+            duration_sec: minutesToSeconds(active_preset.pomodoro_time)
+        })
+        newStage.push({
+            name:"Long break",
+            duration_sec: minutesToSeconds(active_preset.long_break_time)
+        })
+    }
+    else{
+        newStage = stagesMock
+    }
+    setPomodoroStages(newStage)
+
+  }
+  
   const startPomodoro = () => {
+      activePresetToStages()
       const start = new Audio(Sound2)
       start.volume = 0.8
       start.play()
@@ -95,6 +126,7 @@ const Pomodoro:FC = () => {
   }
 
   useEffect(() => {
+      if (!pomodoroStages) return
         let stage= pomodoroStages[0]
         let stage_index= 0
         const stages_length= pomodoroStages.length

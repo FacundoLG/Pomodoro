@@ -1,7 +1,6 @@
 export interface Preset {
-    id?: number | string
-    user_id?: number | string
-    local_id?: number | string
+    id?: number
+    user_id?: number 
     name: string
     pomodoro_time: number
     short_break_time: number

@@ -2,57 +2,50 @@ import React, { useEffect, useState } from 'react'
 import { BsSave } from 'react-icons/bs'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../components/Button'
-import { SET_PRESETS } from '../redux/types'
+import { SET_ACTIVE_PRESET, SET_PRESETS } from '../redux/types'
 import styles from "./presets.module.css"
 import { Preset as PresetType } from '../types'
 import Preset from '../components/Preset'
+import { useNavigate } from 'react-router-dom'
 
 
 const Presets = () => {
     const {presets,user} = useSelector((state:any) => state)
     console.log(presets)
     const dispatch = useDispatch()
-    let localPresets: Array<PresetType> =[]
     useEffect(() => {
         if (user.tkn) {
             // Get cloud presets
-        }else{
-            dispatch({
-                type: SET_PRESETS,
-                payload: localPresets = JSON.parse(localStorage.getItem("presets") || "[]" ) 
-            })
         }  
     },[])
     const [pomodoroTime,setPomodoroTime] = useState(30)
     const [shortBreakTime,setShortBreakTime] = useState(5)
     const [longBreakTime,setLongBreakTime] = useState(20)
     const [shortsPerLong,setShortsPerLong] = useState(2)
+    const navigate = useNavigate()
 
     const savePreset = () => {
         const newPreset:PresetType = {
-            local_id: Math.floor(Math.random() * 100) + Date.now(),
             name: "new preset",
             pomodoro_time: pomodoroTime,
             short_break_time: shortBreakTime,
             long_break_time: longBreakTime,
             shorts_per_long: shortsPerLong
-        } 
-        const storePresets:Array<PresetType> = presets.presets
-        storePresets.push(newPreset)
-        localStorage.setItem("presets",JSON.stringify(storePresets))
-        dispatch({
-            type: SET_PRESETS,
-            payload: storePresets
-        })     
+        }
+        if (!user.tkn){
+            dispatch({
+                type: SET_ACTIVE_PRESET,
+                payload: newPreset
+            })
+            navigate("/pomodoro")
+            return
+        }
+        //API ENDPOINT CALL 
+        
     }
 
     const deletePreset = (id: string | number | undefined) => {
-       const newPresets = presets.presets.filter((preset:PresetType) => preset.local_id !== id)
-       localStorage.setItem("presets",JSON.stringify(newPresets))
-       dispatch({
-           type:SET_PRESETS,
-           payload: newPresets
-       })
+       // API ENDPOINT CALL
     }
     return (
         <div className={styles.presets}>
@@ -99,6 +92,10 @@ const Presets = () => {
                 {presets.presets.map((data:PresetType,index:number) => 
                    <Preset onDelete={deletePreset} onPlay={console.log} onEdit={console.log} key={data.name + "_" + index} {...data} />
                 )}
+                {
+                    !user.tkn &&
+                    <p>You need and account to save presets</p>
+                }
             </div>
         </div>
   )

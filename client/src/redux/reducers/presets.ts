@@ -1,11 +1,18 @@
 import _default from "react-redux/es/components/connect"
+import { Action } from "redux"
+import { Preset } from "../../types"
 import {SET_ACTIVE_PRESET, SET_PRESETS} from "../types"
-const initialState = {
-    presets: [],
-    active_preset: {}
+
+type PresetState = {
+    presets: Preset[]
+    active_preset?: Preset
 }
 
-const presetReducer = (state = initialState,action) => {
+const initialState:PresetState = {
+    presets: [],
+}
+
+const presetReducer = (state = initialState,action: any) => {
     switch(action.type){
         case SET_PRESETS:
             return {
