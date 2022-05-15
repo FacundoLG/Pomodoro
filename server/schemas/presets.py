@@ -11,3 +11,6 @@ class Preset(BaseModel):
 class PresetInDatabase(Preset):
     id: int 
     user_id:int
+
+class PresetID(BaseModel):
+    id: int =Field(...)

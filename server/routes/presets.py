@@ -1,6 +1,8 @@
 #Python
 
 #Pydantic
+from operator import and_
+import string
 from lib.auth import Auth
 #FastAPI
 from email import message
@@ -15,7 +17,7 @@ from middlewares.verify_token import VerifyToken
 from schemas.response import Response
 #Schemas
 from schemas.user import UserInToken
-from schemas.presets import Preset, PresetInDatabase
+from schemas.presets import Preset, PresetID, PresetInDatabase
 
 presets_route = APIRouter(prefix="/presets",route_class=VerifyToken) 
 
@@ -62,3 +64,19 @@ def create_preset(preset: Preset = Body(...), Authorization: str = Header(...)):
         shorts_per_long=preset.shorts_per_long,
         ))
     return Response(message="Preset saved successfully")
+
+@presets_route.delete(
+    path="/",
+    response_model=None,
+    status_code=status.HTTP_200_OK,
+    summary="Delete preset",
+    tags=["Presets"]
+)
+def delete_preset(
+    Authorization:str = Header(...),
+    preset_data: PresetID = Body(...) ):
+
+    token = Authorization.split(" ")[1]
+    data = Auth().decode_user_token(token,True)
+    conn.execute(presets.delete().where(and_(presets.c.user_id == data["id"], presets.c.id == preset_data.id)))
+    return Response(message="Preset deleted")

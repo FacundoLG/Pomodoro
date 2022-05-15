@@ -137,5 +137,5 @@ def login(
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=ResponseError(error="User not found")
+            detail="user not found"
         )
