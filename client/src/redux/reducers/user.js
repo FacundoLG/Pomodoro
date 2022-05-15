@@ -2,7 +2,7 @@ import {SET_USER_DATA} from "../types"
 const initialState = {
     username: null,
     image_url: null,
-    tkn: "",
+    tkn: null,
 }
 
 const userReducer = (state = initialState,action) => {
