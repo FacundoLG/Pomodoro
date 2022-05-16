@@ -1,16 +1,8 @@
 .container{
     display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
-}
-.in_out_buttons{
-    display: flex;
-    height: min-content;
-    width: 100%;
-    align-items: center;
-    padding: var(--space-1);
-    justify-content: space-between;
-    margin: 0 0 0 auto;
 }
 .in_out_buttons div{
     display: flex;
@@ -22,17 +14,15 @@
     margin: 0 0 0 var(--min-space-1);
 }
 .header{
-    position: absolute;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    height: 100vh;
-    width: 70px;
+    width: 100%;
     border-radius:  0 20px 20px 0;
     padding: var(--space-1);
 }
-.center{
-    align-items: center;
+.header > .buttons_container{
+    display: flex;
 }
 .header img {
     width: 40px;
@@ -40,7 +30,6 @@
     background-color: white;
     border-radius: 50%;
     border: 0;
-    margin-bottom: var(--space-1);
 }
 .gear_icon{
     color: white;
