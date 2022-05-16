@@ -41,10 +41,10 @@ const Header:FC<Props> = ({children}) => {
                 <>
                     <Button style="bordered" onClick={() => {
                         navigate("/singin")
-                    }} >Sing in</Button>
+                    }} >Singin</Button>
                     <Button onClick={() => {
                         navigate("/singup")
-                    }}>Sing up</Button>
+                    }}>Singup</Button>
                 </>
             }
             </div>

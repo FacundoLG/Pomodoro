@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     width: 90vw;
-    max-width: 400px;
+    max-width: 350px;
     margin: auto;
     background-color: var(--secondary-color-1);
     padding: var(--space-1);
@@ -26,13 +26,14 @@
     font-weight: bold;
 }
 .input_container > input {
-    font-size: 19px;
+    font-size: 17px;
     border: none;
     border-radius: 10px;
     padding: var(--min-space-1);
     color: var(--font-color-1);
     background-color: var(--primary-color-1);
     font-weight: bold;
+    box-shadow: 0px 0px 10px 2px #0000004f inset;
 }
 .input_container > input:focus {
     outline: solid var(--secondary-color-2) 2.5px;
