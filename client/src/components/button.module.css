@@ -1,7 +1,6 @@
 .button{
     display: flex;
     align-items: center;
-    width: min-content;
     height: 40px;
     padding: var(--min-space-1) var(--space-1);
     font-size: 17px;

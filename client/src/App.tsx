@@ -3,8 +3,7 @@ import './App.css'
 import Header from './components/Header'
 import Pomodoro from './pages/Pomodoro'
 import Presets from './pages/Presets'
-import SingIn from './pages/SingIn'
-import SingUp from './pages/SingUp'
+import Auth from './pages/Auth'
 
 function App() {
 
@@ -12,11 +11,9 @@ function App() {
     <div className="App">
        <BrowserRouter>
         <Routes>
-          <Route path='/'>
-              <Route path='singin' element={<SingIn/>}/> 
-              <Route path='singup' element={<SingUp/>}/>
-          </Route>
-          <Route path='pomodoro' element={
+          <Route path='/singin' element={<Auth mode='singIn'/>}/> 
+          <Route path='/singup' element={<Auth mode="singUp"/>}/>
+          <Route path='/pomodoro' element={
             <Header>
               <Outlet/>
             </Header>

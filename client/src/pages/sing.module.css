@@ -8,6 +8,7 @@
     background-color: var(--secondary-color-1);
     padding: var(--space-1);
     border-radius: 20px;
+    box-shadow: 2px 2px 5px 0px #0000004f;
 }
 .form_title{
     text-align: center;
@@ -18,12 +19,12 @@
     display: flex;
     width: 100%;
     flex-direction: column;
-    margin: 0 0 var(--space-2) 0;
+    margin: 0 0 var(--min-space-1) 0;
 }
 .input_container > label {
     margin: var(--min-space-1) 0;
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 17px;
+    font-weight: 600;
 }
 .input_container > input {
     font-size: 17px;
@@ -37,4 +38,11 @@
 }
 .input_container > input:focus {
     outline: solid var(--secondary-color-2) 2.5px;
+}
+.link{
+    color: var(--secondary-color-2);
+}
+.error{
+    margin: 0 0 10px 0;
+    color: var(--danger-color);
 }

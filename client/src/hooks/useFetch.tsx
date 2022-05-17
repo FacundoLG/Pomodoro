@@ -4,19 +4,24 @@ import { useEffect, useState } from "react"
 interface FetchProps {
     url: string
     method: string
-    body?: Object
-    headers?: Object
+    body?: BodyInit
+    headers?: HeadersInit
 }
 
 const useFetch = (props:FetchProps) => {
   const [data,setData] = useState<any | null>(null)
-  const [loading,setLoading] = useState(true)
+  const [loading,setLoading] = useState(false)
   const [error,setError] = useState(null)
-  const Exec = () => {
+  const Exec = (params:{body?: BodyInit, headers?: HeadersInit}) => {
+      const {body,headers} = params
       setLoading(true)
       fetch(props.url,{
-          method: props.method
-      }).then((res:Response) => {
+          method: props.method,
+          body: body || props.body,
+          headers: headers || props.headers,
+
+      }).then((res:Response) => res.json())
+      .then(res => {
           setData(res)
       }).catch((err) => {
           setError(err)    
@@ -24,10 +29,7 @@ const useFetch = (props:FetchProps) => {
           setLoading(false)
       })
   }
-  useEffect(() => {
-    Exec()
-  })
-  return {data,loading,error}
+  return {data,loading,error,Exec}
 }
 
 export default useFetch
