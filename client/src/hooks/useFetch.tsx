@@ -10,8 +10,13 @@ interface FetchProps {
 
 const useFetch = (props:FetchProps) => {
   const [data,setData] = useState<any | null>(null)
-  const [loading,setLoading] = useState(false)
+  const [loading,setLoading] = useState<boolean>(false)
   const [error,setError] = useState(null)
+  const Clean = () => {
+      setData(null)
+      setLoading(false)
+      setError(null)
+  }
   const Exec = (params:{body?: BodyInit, headers?: HeadersInit}) => {
       const {body,headers} = params
       setLoading(true)
@@ -22,6 +27,7 @@ const useFetch = (props:FetchProps) => {
 
       }).then((res:Response) => res.json())
       .then(res => {
+          console.log(res)
           setData(res)
       }).catch((err) => {
           setError(err)    
@@ -29,7 +35,7 @@ const useFetch = (props:FetchProps) => {
           setLoading(false)
       })
   }
-  return {data,loading,error,Exec}
+  return {data,loading,error,Exec,Clean}
 }
 
 export default useFetch

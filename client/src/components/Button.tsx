@@ -6,12 +6,16 @@ type Style = "fill" | "bordered" | "danger" | "icon"
 interface Props {
     children:ReactNode
     onClick?: MouseEventHandler<HTMLButtonElement>
+    disabled?: boolean 
     style?: Style
 }
 
-const Button:FC<Props> = ({children,onClick,style}) => {
+const Button:FC<Props> = ({children,onClick,style,disabled = false}) => {
   return (
-    <button className={`${styles.button} ${style == "bordered"? styles.bordered : style == "danger"? styles.danger : style == "icon"? styles.icon :  styles.fill }`} onClick={onClick && onClick}>{children}</button>
+    <button className={`${styles.button} ${style == "bordered"? styles.bordered : style == "danger"? styles.danger : style == "icon"? styles.icon :  styles.fill }`} 
+            onClick={onClick && onClick}
+            disabled={disabled}
+            >{children}</button>
   )
 }
 
