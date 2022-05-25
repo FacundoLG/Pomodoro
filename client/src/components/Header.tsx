@@ -12,7 +12,7 @@ const Header:FC<Props> = ({children}) => {
   const navigate = useNavigate()
   const {user} = useSelector( (state: any) => state)
   console.log(user)
-  const isLogged = user.image_url && user.username && user.tkn
+  const isLogged =  user.username && user.tkn
   return (
     <div className={styles.container}>
         <header className={styles.header}>

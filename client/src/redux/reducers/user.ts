@@ -1,6 +1,6 @@
 import {SET_USER_DATA} from "../types"
 
-type UserState = {
+export type UserState = {
     username: string | null,
     image_url: string | null,
     tkn: string | null
@@ -13,7 +13,7 @@ const initialState:UserState = {
     tkn: null,
 }
 
-const userReducer = (state = initialState,action:any) => {
+const userReducer = (state = initialState,action:{type: any, payload: UserState}) => {
     switch(action.type){
         case SET_USER_DATA:
             return {
