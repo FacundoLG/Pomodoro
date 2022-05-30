@@ -1,5 +1,6 @@
-from typing import Dict, Optional
+from typing import Dict, Optional,List
 from pydantic import BaseModel
+
 
 
 class Token(BaseModel):
@@ -7,6 +8,7 @@ class Token(BaseModel):
 
 class Response(BaseModel):
     message: Optional[str]
+    data: Optional[Dict]
 
 class ResponseToken(Response):
     data: Token 

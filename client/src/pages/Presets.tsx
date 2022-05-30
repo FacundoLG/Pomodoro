@@ -7,26 +7,52 @@ import styles from "./presets.module.css"
 import { Preset as PresetType } from '../types'
 import Preset from '../components/Preset'
 import { useNavigate } from 'react-router-dom'
+import useFetch from '../hooks/useFetch'
 
 
 const Presets = () => {
     const {presets,user} = useSelector((state:any) => state)
     console.log(presets)
     const dispatch = useDispatch()
-    useEffect(() => {
-        if (user.tkn) {
-            // Get cloud presets
-        }  
-    },[])
+    const {data,error,loading,Exec,Clean } = useFetch({
+        url: import.meta.env["VITE_SERVER_URL"] + "presets",
+        method: "GET"
+    })
+
     const [pomodoroTime,setPomodoroTime] = useState(30)
     const [shortBreakTime,setShortBreakTime] = useState(5)
     const [longBreakTime,setLongBreakTime] = useState(20)
     const [shortsPerLong,setShortsPerLong] = useState(2)
+    const [pomodoroName,setPomodoroName] = useState("")
     const navigate = useNavigate()
 
+    const refreshData = () => {
+        const getHeader:HeadersInit = new Headers()
+        getHeader.append("Authorization","bearer "+user.tkn)
+        Exec(
+            {
+             headers: getHeader, 
+             method:"GET"  
+            }
+        )
+    }
+
+    useEffect(() => {
+        if(user?.tkn){
+            refreshData()
+        }
+    },[])
+    useEffect(() => {
+        if(Array.isArray(data)){
+            dispatch({
+                type: SET_PRESETS,
+                payload: data
+            })
+        }
+    },[data])
     const savePreset = () => {
         const newPreset:PresetType = {
-            name: "new preset",
+            name: pomodoroName || "new preset",
             pomodoro_time: pomodoroTime,
             short_break_time: shortBreakTime,
             long_break_time: longBreakTime,
@@ -41,7 +67,16 @@ const Presets = () => {
             return
         }
         //API ENDPOINT CALL 
-        
+
+        const postHeader:HeadersInit = new Headers()
+        postHeader.append("Content-Type","application/json")
+        postHeader.append("Authorization","bearer "+ user.tkn)
+        const postBody = JSON.stringify(newPreset)
+        Exec({
+            method: "POST",
+            body: postBody,
+            headers: postHeader,
+        })
     }
 
     const deletePreset = (id: string | number | undefined) => {
@@ -50,6 +85,17 @@ const Presets = () => {
     return (
         <div className={styles.presets}>
             <div className={styles.preset_creator}>
+                <div>
+                    <div style={{width: "100%"}}>
+                        <label htmlFor="">Name</label>
+                        <input 
+                        className={styles.input}
+                        type="text"
+                        value={pomodoroName}
+                        onChange={(e) => {setPomodoroName(e.target.value) }}
+                        />
+                    </div>
+                </div>
                 <div className={styles.creator_top}>
                     <div>
                         <label>Pomodoro</label>

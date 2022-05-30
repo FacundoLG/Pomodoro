@@ -39,7 +39,7 @@ def get_presets(Authorization: str = Header(...)):
     data:UserInToken = Auth().decode_user_token(token,True)
     fetched_presets:List[PresetInDatabase] = conn.execute(presets.select().where(presets.c.user_id == data["id"])).fetchall()
     
-    return fetched_presets
+    return  fetched_presets
 @presets_route.post(
     path="/",
     response_model=Response,

@@ -34,7 +34,7 @@ const Auth:FC<Auth> = ({mode}) => {
     Form.append("username",username)
     Form.append("password",password)
     Exec({
-      body: Form
+      body: Form,
     })  
   }
 
@@ -46,7 +46,7 @@ const Auth:FC<Auth> = ({mode}) => {
     Form.append("email",email)
     Form.append("confirmation_password",confirmationPassword)
     Exec({
-      body: Form
+      body: Form,
     })
   }
 
@@ -94,8 +94,15 @@ const Auth:FC<Auth> = ({mode}) => {
                 return setPasswordError(err.msg)
               }
             })
+    }else{
+      if(data?.detail?.email){
+        setEmailError(data.detail.email)
+      }
+      if(data?.detail?.username){
+        setUsernameError(data.detail.username)
+      }
     }
-    if(data?.data){
+    if(data?.data?.token){
      const tokenData = JSON.parse(atob(data.data.token.split(".")[1]))
      console.log(tokenData)
 
@@ -109,6 +116,9 @@ const Auth:FC<Auth> = ({mode}) => {
        payload: userData
      })
      navigate("/pomodoro")
+    }
+    if(data?.data?.message == "User created successfully"){
+      navigate("/singin")
     }
   },[data])
 

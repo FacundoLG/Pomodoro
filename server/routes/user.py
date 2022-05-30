@@ -1,10 +1,10 @@
 #Python
-
+from typing import Optional
+from pydantic import EmailStr
 #FastAPI
 from fastapi import APIRouter, Form,HTTPException,status
-from pydantic import EmailStr
-from sqlalchemy import or_
 #DB
+from sqlalchemy import or_
 from config.db import conn
 from lib.auth import Auth
 #Shemas
@@ -48,14 +48,14 @@ def register(
         example="sdfgklgf.edfrkjih"
         ),
     email: EmailStr = Form(...),
-    first_name:str = Form(
-        ...,
+    first_name: Optional[str] = Form(
+        default="",
         max_length=name_max_length,
         min_length=name_min_length,
         example="Facundo Leonel"
     ),
-    last_name: str = Form(
-        ...,
+    last_name: Optional[str] = Form(
+        default="",
         max_length=name_max_length,
         min_length=name_min_length,
         example="Gimenez",
@@ -102,13 +102,13 @@ def login(
     username: str = Form(
         ...,
         max_length=username_max_length,
-        min_length=username_min_length,
+        min_length=1,
         example="WhiteBeard33",
         ),
     password: str = Form(
         ...,
         max_length=password_max_length,
-        min_length=password_min_length,
+        min_length=1,
         example="sdfgklgf.edfrkjih"
         ),
     ):
@@ -134,8 +134,17 @@ def login(
                        "token": token
                      }
                 )
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail={
+                    "error": "invalid user or password"
+                }
+            )
     else:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="user not found"
+            detail={
+                "error": "invalid user or password"
+            }
         )

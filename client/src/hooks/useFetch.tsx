@@ -17,11 +17,11 @@ const useFetch = (props:FetchProps) => {
       setLoading(false)
       setError(null)
   }
-  const Exec = (params:{body?: BodyInit, headers?: HeadersInit}) => {
-      const {body,headers} = params
+  const Exec = (params:{body?: BodyInit, headers?: HeadersInit,method: string }) => {
+      const {body,headers,method} = params
       setLoading(true)
       fetch(props.url,{
-          method: props.method,
+          method: method || props.method,
           body: body || props.body,
           headers: headers || props.headers,
 

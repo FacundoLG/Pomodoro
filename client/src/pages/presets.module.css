@@ -19,11 +19,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: var(--min-space-1);
+    margin: var(--min-space-1) ;
+    margin-top: 4px;
 }
 .creator_top > div{
     display: flex;
     flex-direction: column;
+    width: 32%;
 }
 .preset_creator > div label {
     font-size: 16px;
@@ -31,7 +33,6 @@
 }
 .preset_creator > div input{
     width: 100%;
-    max-width: 100px;
     height: 40px;
     border: none;
     background-color: var(--primary-color-1);
@@ -43,6 +44,9 @@
     -moz-appearance: textfield;
     box-shadow: inset 0px 0px 8px #00000069; 
 }
+.creator_bottom > div input {
+    width: 37%;
+}
 .preset_creator > div input::-webkit-inner-spin-button{
     -webkit-appearance: none;
     
@@ -50,7 +54,7 @@
 .preset_creator > div input:focus{
     outline: var(--secondary-color-2) solid 2.5px;
 }
-.creator_top > div input{
+.creator_top > div input,.input{
     margin: var(--min-space-1) 0 0 0;
 }
 .creator_bottom > div input{
