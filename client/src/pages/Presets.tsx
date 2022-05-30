@@ -76,11 +76,28 @@ const Presets = () => {
             method: "POST",
             body: postBody,
             headers: postHeader,
+            callback: () => {
+                console.log("refresh")
+                refreshData()
+            } 
         })
     }
 
     const deletePreset = (id: string | number | undefined) => {
        // API ENDPOINT CALL
+        const deleteHeader:HeadersInit = new Headers()
+        deleteHeader.append("Authorization","bearer "+user.tkn)
+        deleteHeader.append("Content-type","application/json")
+        const deleteBody = JSON.stringify({id})
+        Exec({
+            method: "DELETE",
+            body: deleteBody,
+            headers: deleteHeader,
+            callback: () => {
+                refreshData()
+            }
+        })
+
     }
     return (
         <div className={styles.presets}>

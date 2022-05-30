@@ -17,8 +17,8 @@ const useFetch = (props:FetchProps) => {
       setLoading(false)
       setError(null)
   }
-  const Exec = (params:{body?: BodyInit, headers?: HeadersInit,method: string }) => {
-      const {body,headers,method} = params
+  const Exec = (params:{body?: BodyInit, headers?: HeadersInit,method: string ,callback?: () => void}) => {
+      const {body,headers,method,callback} = params
       setLoading(true)
       fetch(props.url,{
           method: method || props.method,
@@ -33,6 +33,7 @@ const useFetch = (props:FetchProps) => {
           setError(err)    
       }).finally(() => {
           setLoading(false)
+          callback && callback()
       })
   }
   return {data,loading,error,Exec,Clean}
