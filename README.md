@@ -10,7 +10,7 @@ A Pomodoro web app where you can save presets in your browser, or create an acco
 | Frontend | Backend |
 |----------|---------|
 | React | FastAPI |
-| JS | Python | 
+| TS | Python | 
 | CSS | PostgreSQL|
 
 ## Libraries
