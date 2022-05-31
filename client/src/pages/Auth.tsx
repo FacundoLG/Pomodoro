@@ -73,7 +73,7 @@ const Auth:FC<Auth> = ({mode}) => {
         else setIsDisabled(true)
         return
         case "singUp":
-          if (username.length >= 2 && password.length >= 10 && email.length > 1 && confirmationPassword == password) setIsDisabled(false)
+          if (username.length >= 2 && password.length >= 9 && email.length > 1 && confirmationPassword == password) setIsDisabled(false)
           else setIsDisabled(true)
           return
         }
@@ -116,6 +116,7 @@ const Auth:FC<Auth> = ({mode}) => {
        payload: userData
      })
      navigate("/pomodoro")
+     localStorage.setItem("userData",JSON.stringify(userData))
     }
     if(data?.data?.message == "User created successfully"){
       navigate("/singin")
@@ -150,7 +151,7 @@ const Auth:FC<Auth> = ({mode}) => {
           <p className={styles.error}>{emailError}</p>
           </>
         }
-        <label htmlFor="">password</label>
+        <label htmlFor="">password <span>{"(grather than 8 characters)"}</span> </label>
         <input type="password" 
         value={password}
         onChange={(e) => {setPassword(e.target.value)}}
@@ -172,12 +173,12 @@ const Auth:FC<Auth> = ({mode}) => {
       {
         mode == "singUp" ?
         <>
-          <Button disabled={isDisabled}>{isDisabled && loading ? "loading" : "Sing up" }</Button>
+          <Button type="submit" disabled={isDisabled}>{isDisabled && loading ? "loading" : "Sing up" }</Button>
           <p>Already have an account? <Link to={"/singin"} className={styles.link}>singin</Link></p> 
         </>
         :
         <>
-          <Button disabled={isDisabled}>{isDisabled && loading ? "loading" : "Sing up" }</Button>
+          <Button type="submit" disabled={isDisabled}>{isDisabled && loading ? "loading" : "Sing up" }</Button>
           <p>Don't have an account yet? <Link to={"/singup"} className={styles.link}>singup</Link></p>
         </>
       }

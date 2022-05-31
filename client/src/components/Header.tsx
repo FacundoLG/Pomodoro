@@ -2,17 +2,32 @@ import React, { FC, ReactNode } from 'react'
 import styles from "./header.module.css"
 import {BsGearFill, BsHouse} from "react-icons/bs"
 import Button from './Button'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
+import { SET_USER_DATA } from '../redux/types'
 interface Props {
     children: ReactNode
 }
 
 const Header:FC<Props> = ({children}) => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const {user} = useSelector( (state: any) => state)
   console.log(user)
   const isLogged =  user.username && user.tkn
+  
+  const LogOut = () => {
+    dispatch({
+        type: SET_USER_DATA,
+        payload:{
+            username: null,
+            tkn: null,
+            image_url: null
+        }
+    })
+    navigate("/pomodoro")
+  }
+  
   return (
     <div className={styles.container}>
         <header className={styles.header}>
@@ -25,7 +40,9 @@ const Header:FC<Props> = ({children}) => {
                 isLogged &&
                  <>
                     <div>
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png" alt="" />
+                        <div className={styles.user}>
+                            {user?.username[0]}
+                        </div>
                     </div>
                     {/* <BsGearFill className={styles.gear_icon}/>
                      <Link to="/pomodoro">
@@ -36,7 +53,9 @@ const Header:FC<Props> = ({children}) => {
                 }
             {
                 isLogged ?
-                <Button style='danger'>Log out</Button>
+                <Button style='danger' onClick={() => {
+                    LogOut()
+                }}>Log out</Button>
                 :
                 <>
                     <Button style="bordered" onClick={() => {

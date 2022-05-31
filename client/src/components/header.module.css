@@ -24,12 +24,16 @@
 .header > .buttons_container{
     display: flex;
 }
-.header img {
+.header .user {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 40px;
     height: 40px;
-    background-color: white;
+    background-color: var(--secondary-color-2);
     border-radius: 50%;
     border: 0;
+    font-weight: bold;
 }
 .gear_icon{
     color: white;

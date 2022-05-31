@@ -6,11 +6,16 @@ export type UserState = {
     tkn: string | null
 }
 
+const localUserData:UserState = JSON.parse(localStorage.getItem("userData")||"{}")
 
-const initialState:UserState = {
+let initialState:UserState = {
     username: null,
     image_url: null,
     tkn: null,
+}
+
+if(localUserData?.tkn){
+    initialState = localUserData
 }
 
 const userReducer = (state = initialState,action:{type: any, payload: UserState}) => {

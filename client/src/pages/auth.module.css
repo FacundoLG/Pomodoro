@@ -26,6 +26,10 @@
     font-size: 17px;
     font-weight: 600;
 }
+.input_container > label span{
+    font-size: 14px;
+    font-weight: normal;
+}
 .input_container > input {
     font-size: 17px;
     border: none;

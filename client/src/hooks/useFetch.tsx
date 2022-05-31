@@ -17,7 +17,7 @@ const useFetch = (props:FetchProps) => {
       setLoading(false)
       setError(null)
   }
-  const Exec = (params:{body?: BodyInit, headers?: HeadersInit,method: string ,callback?: () => void}) => {
+  const Exec = (params:{body?: BodyInit, headers?: HeadersInit,method?: string ,callback?: () => void}) => {
       const {body,headers,method,callback} = params
       setLoading(true)
       fetch(props.url,{

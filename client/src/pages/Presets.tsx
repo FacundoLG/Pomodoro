@@ -152,12 +152,13 @@ const Presets = () => {
                 </div>
             </div>
             <div className={styles.presets_list}>
-                {presets.presets.map((data:PresetType,index:number) => 
-                   <Preset onDelete={deletePreset} onPlay={console.log} onEdit={console.log} key={data.name + "_" + index} {...data} />
-                )}
                 {
-                    !user.tkn &&
+                    !user.tkn?
                     <p>You need and account to save presets</p>
+                    :
+                    presets.presets.map((data:PresetType,index:number) => 
+                    <Preset onDelete={deletePreset} onPlay={console.log} onEdit={console.log} key={data.name + "_" + index} {...data} />
+                    )
                 }
             </div>
         </div>
