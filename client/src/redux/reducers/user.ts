@@ -18,7 +18,7 @@ if(localUserData?.tkn){
     initialState = localUserData
 }
 
-const userReducer = (state = initialState,action:{type: any, payload: UserState}) => {
+const userReducer = (state = initialState,action:{type: string, payload: UserState}) => {
     switch(action.type){
         case SET_USER_DATA:
             return {

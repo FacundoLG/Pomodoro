@@ -27,7 +27,6 @@ const useFetch = (props:FetchProps) => {
 
       }).then((res:Response) => res.json())
       .then(res => {
-          console.log(res)
           setData(res)
       }).catch((err) => {
           setError(err)    

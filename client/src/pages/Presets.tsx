@@ -12,7 +12,6 @@ import useFetch from '../hooks/useFetch'
 
 const Presets = () => {
     const {presets,user} = useSelector((state:any) => state)
-    console.log(presets)
     const dispatch = useDispatch()
     const {data,error,loading,Exec,Clean } = useFetch({
         url: import.meta.env["VITE_SERVER_URL"] + "presets",
@@ -50,6 +49,15 @@ const Presets = () => {
             })
         }
     },[data])
+    const playPreset = (presetData:PresetType) => {
+       dispatch({
+                type: SET_ACTIVE_PRESET,
+                payload: presetData
+            })
+            navigate("/pomodoro") 
+    }
+
+
     const savePreset = () => {
         const newPreset:PresetType = {
             name: pomodoroName || "new preset",
@@ -77,7 +85,6 @@ const Presets = () => {
             body: postBody,
             headers: postHeader,
             callback: () => {
-                console.log("refresh")
                 refreshData()
             } 
         })
@@ -157,7 +164,7 @@ const Presets = () => {
                     <p>You need and account to save presets</p>
                     :
                     presets.presets.map((data:PresetType,index:number) => 
-                    <Preset onDelete={deletePreset} onPlay={console.log} onEdit={console.log} key={data.name + "_" + index} {...data} />
+                    <Preset onDelete={deletePreset} onPlay={playPreset} onEdit={console.log} key={data.name + "_" + index} {...data} />
                     )
                 }
             </div>

@@ -3,7 +3,7 @@ import { Action } from "redux"
 import { Preset } from "../../types"
 import {SET_ACTIVE_PRESET, SET_PRESETS} from "../types"
 
-type PresetState = {
+export type PresetState = {
     presets: Preset[]
     active_preset?: Preset
 }
@@ -12,7 +12,9 @@ const initialState:PresetState = {
     presets: [],
 }
 
-const presetReducer = (state = initialState,action: any) => {
+
+
+const presetReducer = (state = initialState,action: {type: string ,payload: PresetState}) => {
     switch(action.type){
         case SET_PRESETS:
             return {

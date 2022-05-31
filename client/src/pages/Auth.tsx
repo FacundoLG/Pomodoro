@@ -104,7 +104,6 @@ const Auth:FC<Auth> = ({mode}) => {
     }
     if(data?.data?.token){
      const tokenData = JSON.parse(atob(data.data.token.split(".")[1]))
-     console.log(tokenData)
 
      const userData:UserState = {
        image_url: "",

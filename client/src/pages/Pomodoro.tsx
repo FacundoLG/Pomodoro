@@ -136,7 +136,6 @@ const Pomodoro:FC = () => {
             const percentage = calculate_percentage(sec,stage.duration_sec || 0)
             const fixed_minutes =fix_one_digit(minutes)
             const fixed_seconds =fix_one_digit(seconds)
-            console.log(minutes,seconds,percentage)
             setClockData({
                 minutes: fixed_minutes,
                 seconds: fixed_seconds,

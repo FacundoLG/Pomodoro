@@ -13,7 +13,6 @@ const Header:FC<Props> = ({children}) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const {user} = useSelector( (state: any) => state)
-  console.log(user)
   const isLogged =  user.username && user.tkn
   
   const LogOut = () => {

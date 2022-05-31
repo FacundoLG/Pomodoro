@@ -26,7 +26,13 @@ const Preset:FC<PresetComponent> = (props) => {
         </div>
         <div>
             <Button style='icon' onClick={() => { props.onDelete(props.id)}} > <BsX/> </Button>
-            <Button style='icon'> <BsPlay/> </Button>
+            <Button style='icon' onClick={() => { props.onPlay({
+              long_break_time,
+              name,
+              pomodoro_time,
+              short_break_time,
+              shorts_per_long,
+            }) }} > <BsPlay/> </Button>
         </div>
     </div>
   )
